@@ -11,12 +11,17 @@ plugins {
 version = "0.1"
 group = "com.zupedu.gabrielpedrico"
 
+allOpen {
+    annotation("javax.inject.Singleton")
+}
+
 val kotlinVersion=project.properties.get("kotlinVersion")
 repositories {
     mavenCentral()
 }
 
 micronaut {
+    runtime("netty")
     testRuntime("junit5")
     processing {
         incremental(true)
@@ -25,18 +30,39 @@ micronaut {
 }
 
 dependencies {
+    kapt("io.micronaut.data:micronaut-data-processor")
     implementation("io.micronaut:micronaut-runtime")
-    implementation("io.micronaut.grpc:micronaut-grpc-runtime")
+    implementation("io.micronaut.beanvalidation:micronaut-hibernate-validator")
+    implementation("io.micronaut.grpc:micronaut-grpc-client-runtime")
     implementation("io.micronaut.kotlin:micronaut-kotlin-runtime")
     implementation("javax.annotation:javax.annotation-api")
     implementation("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}")
     runtimeOnly("ch.qos.logback:logback-classic")
     implementation("io.micronaut:micronaut-validation")
+    implementation("org.hibernate:hibernate-validator:6.1.6.Final")
+    implementation("io.micronaut:micronaut-management")
+    implementation("io.micronaut:micronaut-http-client")
 
     runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")
 
+    annotationProcessor("io.micronaut:micronaut-inject-java")
+
     testImplementation("io.micronaut:micronaut-http-client")
+
+    testImplementation("org.testcontainers:junit-jupiter")
+    testImplementation("org.testcontainers:testcontainers")
+    // testes
+    testAnnotationProcessor("io.micronaut:micronaut-inject-java")
+    testImplementation("org.mockito:mockito-core")
+    testImplementation("com.h2database:h2")
+    testImplementation("io.micronaut:micronaut-http-client")
+    // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-params
+    testImplementation("org.junit.jupiter:junit-jupiter-params:5.7.2")
+    // https://mvnrepository.com/artifact/com.github.javafaker/javafaker
+    testImplementation("com.github.javafaker:javafaker:1.0.2")
+
+    testImplementation("org.mockito:mockito-inline:3.+")
 
 }
 
